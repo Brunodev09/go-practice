@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"strconv"
 )
 
@@ -79,39 +78,49 @@ func adjacentElementsProduct(slice []int) int {
 
 // You can remove 3 from the array to get the strictly increasing sequence [1, 2]. Alternately, you can remove 2 to get the strictly increasing sequence [1, 3].
 
-func almostIncreasingSequence(slice []int) bool {
-	auxArr1 := make([]int, 0)
-	auxArr2 := make([]int, 0)
-	aux := make([]int, 0)
+//	a := [...]int{1, 3, 2, 3, 3}
+// print(almostIncreasingSequence(a[:]))
+func remove(slice []int, s int) []int {
+	return append(slice[:s], slice[s+1:]...)
+}
 
-	if len(slice) == 1 {
-		return true
-	}
-	for i := 0; i < len(slice)-1; i++ {
-		if i == 0 {
-
-		}
-		if i == (len(slice) - 2) {
-
-		}
-		if slice[i] < slice[i+1] {
-			auxArr1 = slice[:i]
-			auxArr2 = slice[i:]
-			aux = append(aux, auxArr1...)
-			aux = append(aux, auxArr2...)
-			fmt.Println(aux, auxArr1, auxArr2)
-			for j := 0; j < len(aux)-1; j++ {
-				if aux[j] < aux[j+1] {
-					break
-				}
-				return true
-			}
+func isSequence(slice []int, index int) bool {
+	aux := remove(slice[:], index)
+	for i := 1; i < len(aux)-1; i++ {
+		if aux[i] >= aux[i+1] || aux[i] <= aux[i-1] {
+			return false
 		}
 	}
 	return true
 }
 
+func almostIncreasingSequence(slice []int) bool {
+	sequence := true
+	for i := 1; i < len(slice)-1; i++ {
+		if slice[i] >= slice[i+1] {
+			sequence = isSequence(slice[:], i)
+			if !sequence {
+				return sequence
+			}
+		}
+		if slice[i] < slice[i-1] {
+			sequence = isSequence(slice[:], i-1)
+			if !sequence {
+				return sequence
+			}
+		}
+	}
+	return sequence
+}
+
+// Ratiorg got statues of different sizes as a present from CodeMaster for his birthday, each statue having an non-negative integer size. Since he likes to make things perfect, he wants to arrange them from smallest to largest so that each statue will be bigger than the previous one exactly by 1. He may need some additional statues to be able to accomplish that. Help him figure out the minimum number of additional statues needed.
+
+// Example
+
+// For statues = [6, 2, 3, 8], the output should be makeArrayConsecutive2(statues) = 3.
+
+// Ratiorg needs statues of sizes 4, 5 and 7.
+
 func main() {
-	a := [...]int{1, 3, 2, 0}
-	print(almostIncreasingSequence(a[:]))
+
 }
