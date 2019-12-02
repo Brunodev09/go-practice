@@ -18,6 +18,20 @@ func remove(slice []int, s int) []int {
 	return append(slice[:s], slice[s+1:]...)
 }
 
+func removeByPointer(slice *[]int, s int) []int {
+	return append((*slice)[:s], (*slice)[s+1:]...)
+}
+
+func filterInt(arr []int, target int) []int {
+	for i := 0; i < len(arr); i++ {
+		if arr[i] == target {
+			arr = remove(arr, target)
+			i--
+		}
+	}
+	return arr
+}
+
 // Write a function that returns the sum of two numbers.
 
 // Example
@@ -188,58 +202,56 @@ func shapeArea(n int) int {
 
 // Note that the free room in the final column makes the full column unsuitable for bots (not just the room directly beneath it). Thus, the answer is 1 + 1 + 1 + 5 + 1 = 9.
 
-// function matrixes(arr) {
+// function matrixElementsSum(matrix) {
 // 	let sum = 0;
-// 	for (let i = 1; i < arr.length; i++) {
-// 		for (let j = 0; j < arr[i].length; j++) {
-// 			console.log(arr);
-// 			if (!arr[i - 1][j]) arr[i][j] = 0;
+// 	for (let i = 1; i < matrix.length; i++) {
+// 		for (let j = 0; j < matrix[i].length; j++) {
+// 			console.log(matrix);
+// 			if (!matrix[i - 1][j]) matrix[i][j] = 0;
 // 		}
 // 	}
-// 	for (let i = 0; i < arr.length; i++) {
-// 		arr[i] = arr[i].filter(k => k);
+// 	for (let i = 0; i < matrix.length; i++) {
+// 		matrix[i] = matrix[i].filter(k => k);
 // 	}
-// 	arr.map(k => k.map(w => (sum += w)));
-// 	console.log(arr, sum);
+// 	matrix.map(k => k.map(w => (sum += w)));
+// 	console.log(matrix, sum);
 // 	return sum;
+
 // }
 
 func matrixElementsSum(slice [][]int) int {
 	var sum int = 0
 	for i := 1; i < len(slice); i++ {
 		for j := 0; j < len(slice[i]); j++ {
-			fmt.Println(slice)
-			if slice[i-1][j] != 0 {
+			if slice[i-1][j] == 0 {
 				slice[i][j] = 0
 			}
 		}
 	}
+	fmt.Println(slice, "updated")
 	for i := 0; i < len(slice); i++ {
-		for j := 0; j < len(slice); j++ {
+		for j := 0; j < len(slice[i]); j++ {
 			if slice[i][j] == 0 {
 				slice[i] = remove(slice[i], j)
+				j--
 			}
 		}
 	}
-	fmt.Println(slice)
-
+	for i := 0; i < len(slice); i++ {
+		for j := 0; j < len(slice[i]); j++ {
+			sum += slice[i][j]
+		}
+	}
+	fmt.Println(slice, sum)
 	return sum
-
 }
 
 // [[1, 1, 1, 0], [0, 5, 0, 1], [2, 1, 3, 10]]
 func main() {
-	// a := make([][]int, 0)
-	// var m, n int
-	// var mat = make([][]int, m)
-	// for i := range mat {
-	// 	mat[i] = make([]int, n)
-	// }
 	var a = [...][]int{
 		{1, 1, 1, 0},
 		{0, 5, 0, 1},
 		{2, 1, 3, 10},
 	}
 	print(matrixElementsSum(a[:][:]))
-
 }
